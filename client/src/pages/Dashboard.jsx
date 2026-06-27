@@ -37,6 +37,7 @@ const Dashboard = () => {
 
   const [alerts, setAlerts] = useState([]);
   const [isMockDb, setIsMockDb] = useState(false);
+  const [isClientMock, setIsClientMock] = useState(localStorage.getItem('use_client_mock') === 'true');
 
   const fetchDashboardData = async () => {
     try {
@@ -127,6 +128,24 @@ const Dashboard = () => {
 
   return (
     <div>
+      {isClientMock && (
+        <div className="alert-banner warning" style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderLeft: '4px solid #d97706', background: 'rgba(217, 119, 6, 0.05)', padding: '1rem', borderRadius: '12px' }}>
+          <div className="alert-banner-message" style={{ color: '#d97706', fontWeight: 500 }}>
+            ⚠️ <strong>Offline Mode:</strong> Website is running in browser-only offline mode. Live backend database is not syncing.
+          </div>
+          <button 
+            className="btn btn-secondary" 
+            style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', marginLeft: '1rem', background: '#d97706', color: '#fff', border: 'none', cursor: 'pointer', borderRadius: '8px', fontWeight: 600 }}
+            onClick={() => {
+              localStorage.removeItem('use_client_mock');
+              window.location.reload();
+            }}
+          >
+            Connect to Live Server
+          </button>
+        </div>
+      )}
+
       {isMockDb && (
         <div className="alert-banner info" style={{ marginBottom: '1.5rem', borderLeftColor: 'var(--primary)' }}>
           <div className="alert-banner-message">

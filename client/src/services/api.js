@@ -24,6 +24,23 @@ if (baseURL && baseURL !== '/api' && !baseURL.endsWith('/api') && !baseURL.endsW
   baseURL = baseURL.replace(/\/$/, '') + '/api';
 }
 
+// Automatically check if the backend is reachable and disable client-side mock if it is
+(async () => {
+  if (typeof window !== 'undefined' && localStorage.getItem('use_client_mock') === 'true') {
+    try {
+      const ping = axios.create({
+        baseURL,
+        timeout: 2000
+      });
+      await ping.get(''); 
+      console.log('[API] Backend server is reachable! Disabling offline client mock.');
+      localStorage.removeItem('use_client_mock');
+    } catch (e) {
+      console.log('[API] Backend server is still unreachable. Keeping offline mock active.');
+    }
+  }
+})();
+
 const shouldUseMock = () => {
   if (localStorage.getItem('use_client_mock') === 'true') {
     return true;
