@@ -1,6 +1,29 @@
 import axios from 'axios';
 import { handleMockRequest, initMockData } from './mockService';
 
+// Force clear use_client_mock and clean up offline mock sessions
+(function() {
+  if (typeof window !== 'undefined') {
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const apiURL = import.meta.env.VITE_API_URL || '';
+    const isRealBackend = apiURL && !apiURL.includes('localhost') && !apiURL.includes('127.0.0.1');
+    if (isGitHubPages && isRealBackend) {
+      localStorage.removeItem('use_client_mock');
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          const parsed = JSON.parse(storedUser);
+          // If the cached user is not one of the live seeded accounts, force logout
+          if (parsed.email && parsed.email !== 'admin@example.com' && parsed.email !== 'agentuser@example.com') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+          }
+        } catch (e) {}
+      }
+    }
+  }
+})();
+
 // Determine baseURL based on env
 let baseURL = import.meta.env.VITE_API_URL;
 
@@ -42,11 +65,7 @@ if (baseURL && baseURL !== '/api' && !baseURL.endsWith('/api') && !baseURL.endsW
 })();
 
 const shouldUseMock = () => {
-  if (localStorage.getItem('use_client_mock') === 'true') {
-    return true;
-  }
-  
-  // Auto-detect GitHub Pages and enable mock if no production backend is configured
+  // Always disable mock on GitHub Pages if a real production backend is configured
   const isGitHubPages = typeof window !== 'undefined' && window.location.hostname.includes('github.io');
   if (isGitHubPages) {
     const apiURL = import.meta.env.VITE_API_URL || '';
@@ -54,8 +73,12 @@ const shouldUseMock = () => {
     if (isLocalBackend) {
       return true;
     }
+    return false;
   }
-  
+
+  if (localStorage.getItem('use_client_mock') === 'true') {
+    return true;
+  }
   return false;
 };
 
@@ -75,10 +98,13 @@ const customAdapter = async (config) => {
     }
     return await defaultAdapter(config);
   } catch (error) {
-    // If there is no response, it is a connection-level error (mixed content block, CORS block, or server down)
     const isConnectionError = !error.response;
+    const isGitHubPages = typeof window !== 'undefined' && window.location.hostname.includes('github.io');
+    const apiURL = import.meta.env.VITE_API_URL || '';
+    const isRealBackend = apiURL && !apiURL.includes('localhost') && !apiURL.includes('127.0.0.1');
     
-    if (isConnectionError) {
+    // Only activate offline client mock if we are not on GitHub Pages with a real backend
+    if (isConnectionError && (!isGitHubPages || !isRealBackend)) {
       console.warn('[API Warning] Backend server is unreachable. Activating Client-Side Mock Database...');
       localStorage.setItem('use_client_mock', 'true');
       initMockData();
