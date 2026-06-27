@@ -76,8 +76,8 @@ app.get('/db-viewer', async (req, res) => {
         <head><title>Database Viewer Error</title></head>
         <body style="font-family: system-ui, sans-serif; padding: 2rem; background: #0b0f19; color: #ef4444;">
           <h1>Database Viewer Error</h1>
-          <p>Failed to retrieve database records: \${error.message}</p>
-          <pre style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; overflow: auto;">\${error.stack}</pre>
+          <p>Failed to retrieve database records: ${error.message}</p>
+          <pre style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; overflow: auto;">${error.stack}</pre>
         </body>
       </html>
     `);

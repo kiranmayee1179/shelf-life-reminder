@@ -12,6 +12,22 @@ function renderDbViewerHtml(data) {
   const dbStatusClass = isMock ? 'status-warning' : 'status-success';
   const dbStatusText = isMock ? 'Mock Fallback Active' : 'Connected to MySQL';
 
+  // Safe date formatter supporting both String and Date instances
+  const safeFormatDate = (val) => {
+    if (!val) return 'N/A';
+    if (val instanceof Date) {
+      return val.toISOString().split('T')[0];
+    }
+    if (typeof val === 'string') {
+      return val.split('T')[0];
+    }
+    try {
+      return new Date(val).toISOString().split('T')[0];
+    } catch (e) {
+      return String(val);
+    }
+  };
+
   // Helper to get batch status class
   const getBatchStatusClass = (status) => {
     switch (String(status).toLowerCase()) {
@@ -36,9 +52,9 @@ function renderDbViewerHtml(data) {
       <td><span class="batch-num">${b.batch_number || `B-BATCH-${String(b.id).padStart(3, '0')}`}</span></td>
       <td><strong>${b.product_name}</strong></td>
       <td><span class="category-tag">${b.category}</span></td>
-      <td>${b.manufacturing_date ? b.manufacturing_date.split('T')[0] : 'N/A'}</td>
+      <td>${safeFormatDate(b.manufacturing_date)}</td>
       <td>${b.shelf_life} days</td>
-      <td>${b.expiry_date ? b.expiry_date.split('T')[0] : 'N/A'}</td>
+      <td>${safeFormatDate(b.expiry_date)}</td>
       <td><strong>${b.quantity}</strong></td>
       <td>
         <span class="badge ${getBatchStatusClass(b.status)}">${b.status}</span>
