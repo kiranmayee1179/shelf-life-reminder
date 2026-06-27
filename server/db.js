@@ -2,12 +2,16 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
+const isAiven = (process.env.DB_HOST || '').includes('aivencloud.com');
+const sslConfig = (process.env.DB_SSL === 'true' || isAiven) ? { rejectUnauthorized: false } : undefined;
+
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'shelf_life_db',
-  port: parseInt(process.env.DB_PORT || '3306')
+  port: parseInt(process.env.DB_PORT || '3306'),
+  ssl: sslConfig
 };
 
 let pool = null;
@@ -143,7 +147,8 @@ async function initializeDatabase() {
       host: dbConfig.host,
       user: dbConfig.user,
       password: dbConfig.password,
-      port: dbConfig.port
+      port: dbConfig.port,
+      ssl: dbConfig.ssl
     });
 
     console.log(`Connected to MySQL Server at ${dbConfig.host}:${dbConfig.port}. Ensuring DB "${dbConfig.database}" exists...`);
