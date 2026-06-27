@@ -26,6 +26,7 @@ router.post('/signup', async (req, res) => {
 
     const existingUser = await db.getUserByEmail(email);
     if (existingUser) {
+      db.logActivity(`Failed signup attempt: Account already exists for "${email}".`, 'warning');
       return res.status(400).json({ message: 'Account already exists with this email' });
     }
 
