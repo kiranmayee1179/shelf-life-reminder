@@ -120,21 +120,24 @@ function renderDbViewerHtml(data) {
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #090d16;
-      --bg-panel: #111827;
-      --bg-card: rgba(17, 24, 39, 0.75);
-      --border-color: rgba(255, 255, 255, 0.08);
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --bg-dark: #faf6f0;
+      --bg-panel: #ffffff;
+      --bg-card: #ffffff;
+      --border-color: #eedec5;
+      --text-main: #3e2723;
+      --text-muted: #8d6e63;
       
-      --primary: #3b82f6;
-      --primary-glow: rgba(59, 130, 246, 0.35);
+      --primary: #e05a10;
+      --primary-hover: #c84b00;
+      --primary-light: #fff3e0;
+      --primary-glow: rgba(224, 90, 16, 0.2);
+      
       --success: #10b981;
-      --success-glow: rgba(16, 185, 129, 0.35);
+      --success-glow: rgba(16, 185, 129, 0.2);
       --warning: #f59e0b;
-      --warning-glow: rgba(245, 158, 11, 0.35);
+      --warning-glow: rgba(245, 158, 11, 0.2);
       --danger: #ef4444;
-      --danger-glow: rgba(239, 68, 68, 0.35);
+      --danger-glow: rgba(239, 68, 68, 0.2);
       --purple: #8b5cf6;
       --info: #06b6d4;
     }
@@ -152,8 +155,8 @@ function renderDbViewerHtml(data) {
       padding: 2rem;
       min-height: 100vh;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(224, 90, 16, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(62, 39, 35, 0.04) 0px, transparent 50%);
       background-attachment: fixed;
     }
 
@@ -170,7 +173,7 @@ function renderDbViewerHtml(data) {
       font-family: 'Outfit', sans-serif;
       font-size: 1.8rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      background: linear-gradient(135deg, #e05a10, #3e2723);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.25rem;
@@ -189,7 +192,7 @@ function renderDbViewerHtml(data) {
       border: 1px solid var(--border-color);
       padding: 0.5rem 1rem;
       border-radius: 9999px;
-      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .pulse-dot {
@@ -238,8 +241,8 @@ function renderDbViewerHtml(data) {
       font-weight: 600;
     }
 
-    .status-success .db-status-text { color: #34d399; }
-    .status-warning .db-status-text { color: #fbbf24; }
+    .status-success .db-status-text { color: #059669; }
+    .status-warning .db-status-text { color: #d97706; }
 
     /* Stats Grid */
     .stats-grid {
@@ -254,13 +257,14 @@ function renderDbViewerHtml(data) {
       border: 1px solid var(--border-color);
       border-radius: 16px;
       padding: 1.5rem;
-      backdrop-filter: blur(8px);
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 6px -1px rgba(62, 39, 35, 0.05);
     }
 
     .stat-card:hover {
       transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.15);
+      border-color: var(--primary);
+      box-shadow: 0 10px 15px -3px rgba(62, 39, 35, 0.08);
     }
 
     .stat-label {
@@ -293,8 +297,7 @@ function renderDbViewerHtml(data) {
       border: 1px solid var(--border-color);
       border-radius: 20px;
       padding: 1.75rem;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(62, 39, 35, 0.05);
     }
 
     .tabs {
@@ -307,7 +310,7 @@ function renderDbViewerHtml(data) {
     }
 
     .tab-btn {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(62, 39, 35, 0.03);
       border: 1px solid var(--border-color);
       color: var(--text-muted);
       padding: 0.6rem 1.2rem;
@@ -323,7 +326,7 @@ function renderDbViewerHtml(data) {
     }
 
     .tab-btn:hover {
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(62, 39, 35, 0.06);
       color: var(--text-main);
     }
 
@@ -331,7 +334,7 @@ function renderDbViewerHtml(data) {
       background: var(--primary);
       color: #fff;
       border-color: var(--primary);
-      box-shadow: 0 0 12px var(--primary-glow);
+      box-shadow: 0 4px 12px var(--primary-glow);
     }
 
     .action-row {
@@ -348,7 +351,7 @@ function renderDbViewerHtml(data) {
     }
 
     .refresh-btn {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(62, 39, 35, 0.03);
       border: 1px solid var(--border-color);
       color: var(--text-main);
       padding: 0.5rem 1rem;
@@ -363,7 +366,7 @@ function renderDbViewerHtml(data) {
     }
 
     .refresh-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(62, 39, 35, 0.07);
     }
 
     /* Tables */
@@ -380,7 +383,7 @@ function renderDbViewerHtml(data) {
     }
 
     th {
-      background-color: rgba(255, 255, 255, 0.02);
+      background-color: rgba(62, 39, 35, 0.02);
       color: var(--text-muted);
       padding: 1rem;
       font-size: 0.8rem;
@@ -402,7 +405,7 @@ function renderDbViewerHtml(data) {
     }
 
     tr:hover td {
-      background-color: rgba(255, 255, 255, 0.015);
+      background-color: var(--primary-light);
     }
 
     /* Badges & Tags */
@@ -417,19 +420,19 @@ function renderDbViewerHtml(data) {
       letter-spacing: 0.02em;
     }
 
-    .badge-success { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
-    .badge-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
-    .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
-    .badge-info { background: rgba(6, 180, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 180, 212, 0.2); }
-    .badge-purple { background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.2); }
+    .badge-success { background: #ecfdf5; color: #059669; border: 1px solid #d1fae5; }
+    .badge-warning { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
+    .badge-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+    .badge-info { background: #f0fdfa; color: #0d9488; border: 1px solid #ccfbf1; }
+    .badge-purple { background: #f3e8ff; color: #7c3aed; border: 1px solid #e9d5ff; }
 
     .category-tag {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(62, 39, 35, 0.04);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
       font-size: 0.8rem;
       color: var(--text-muted);
-      border: 1px solid rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(62, 39, 35, 0.02);
     }
 
     .source-tag {
@@ -440,7 +443,7 @@ function renderDbViewerHtml(data) {
     .batch-num {
       font-family: monospace;
       font-weight: 600;
-      color: #60a5fa;
+      color: var(--primary);
     }
 
     .remaining-days {
@@ -458,7 +461,7 @@ function renderDbViewerHtml(data) {
       position: absolute;
       top: 1rem;
       right: 1rem;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(62, 39, 35, 0.03);
       border: 1px solid var(--border-color);
       color: var(--text-main);
       padding: 0.4rem 0.8rem;
@@ -472,10 +475,11 @@ function renderDbViewerHtml(data) {
     .copy-btn:hover {
       background: var(--primary);
       border-color: var(--primary);
+      color: #fff;
     }
 
     pre {
-      background: #060910;
+      background: #faf6f0;
       border: 1px solid var(--border-color);
       padding: 1.5rem;
       border-radius: 12px;
@@ -483,13 +487,13 @@ function renderDbViewerHtml(data) {
       font-family: 'Courier New', Courier, monospace;
       font-size: 0.85rem;
       line-height: 1.5;
-      color: #34d399;
+      color: #059669;
       max-height: 500px;
     }
 
     /* Activity Logs */
     .log-container {
-      background: #060910;
+      background: #faf6f0;
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 1rem;
@@ -502,7 +506,7 @@ function renderDbViewerHtml(data) {
 
     .log-item {
       padding: 0.35rem 0.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(62, 39, 35, 0.05);
     }
 
     .log-item:last-child {
@@ -514,10 +518,10 @@ function renderDbViewerHtml(data) {
       margin-right: 0.5rem;
     }
 
-    .log-item.success .log-text { color: #34d399; }
-    .log-item.warning .log-text { color: #fbbf24; }
-    .log-item.error .log-text { color: #f87171; }
-    .log-item.info .log-text { color: #60a5fa; }
+    .log-item.success .log-text { color: #059669; }
+    .log-item.warning .log-text { color: #d97706; }
+    .log-item.error .log-text { color: #dc2626; }
+    .log-item.info .log-text { color: #2563eb; }
 
     .empty-state {
       padding: 3rem;
