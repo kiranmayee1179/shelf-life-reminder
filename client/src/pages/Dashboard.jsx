@@ -7,7 +7,8 @@ import {
   FaCalendarTimes, 
   FaExclamationTriangle,
   FaArrowRight,
-  FaSync
+  FaSync,
+  FaDatabase
 } from 'react-icons/fa';
 import API from '../services/api';
 import DashboardCard from '../components/DashboardCard';
@@ -103,6 +104,19 @@ const Dashboard = () => {
     }
   };
 
+  const handleOpenDbViewer = () => {
+    let backendUrl = import.meta.env.VITE_API_URL || '';
+    if (!backendUrl) {
+      if (import.meta.env.PROD) {
+        backendUrl = window.location.origin;
+      } else {
+        backendUrl = 'http://localhost:5001';
+      }
+    }
+    backendUrl = backendUrl.replace(/\/api\/?$/, '');
+    window.open(`${backendUrl}/db-viewer`, '_blank');
+  };
+
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
@@ -132,15 +146,26 @@ const Dashboard = () => {
           <h1 className="page-header-title">Sharadha Stores Dashboard</h1>
           <p className="page-header-subtitle">Real-time batch tracking and shelf life monitoring systems</p>
         </div>
-        <button 
-          className="btn btn-primary" 
-          onClick={handleSync} 
-          disabled={syncing}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-        >
-          <FaSync className={syncing ? 'spin-animation' : ''} style={{ animation: syncing ? 'spin 1s linear infinite' : 'none' }} />
-          <span>{syncing ? 'Processing Expiry...' : 'Run Expiry Check'}</span>
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <button 
+            className="btn btn-secondary" 
+            onClick={handleOpenDbViewer}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            title="Opens backend data in new tab (View live backend data)"
+          >
+            <FaDatabase />
+            <span>Open DB Viewer</span>
+          </button>
+          <button 
+            className="btn btn-primary" 
+            onClick={handleSync} 
+            disabled={syncing}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          >
+            <FaSync className={syncing ? 'spin-animation' : ''} style={{ animation: syncing ? 'spin 1s linear infinite' : 'none' }} />
+            <span>{syncing ? 'Processing Expiry...' : 'Run Expiry Check'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}
