@@ -398,18 +398,17 @@ const db = {
     return rows[0];
   },
 
-  updateUserLastLogin: async (userId) => {
+  updateUserLastLogin: async (userId, lastLoginDate = new Date()) => {
     const uId = parseInt(userId);
-    const now = new Date();
     if (useMock) {
       const user = mockUsers.find(u => u.id === uId);
       if (user) {
-        user.last_login = now;
+        user.last_login = lastLoginDate;
         return true;
       }
       return false;
     }
-    await pool.query('UPDATE users SET last_login = ? WHERE id = ?', [now, uId]);
+    await pool.query('UPDATE users SET last_login = ? WHERE id = ?', [lastLoginDate, uId]);
     return true;
   },
 

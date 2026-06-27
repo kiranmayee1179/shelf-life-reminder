@@ -41,7 +41,9 @@ router.post('/signup', async (req, res) => {
       role: 'user'
     });
 
-    await db.updateUserLastLogin(newUser.id);
+    newUser.lastLogin = new Date();
+    console.log("Updated lastLogin:", newUser.lastLogin);
+    await db.updateUserLastLogin(newUser.id, newUser.lastLogin);
 
     const token = jwt.sign({ id: newUser.id, email: newUser.email, role: newUser.role, fullName: newUser.full_name }, JWT_SECRET, {
       expiresIn: '7d'
@@ -89,7 +91,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    await db.updateUserLastLogin(user.id);
+    user.lastLogin = new Date();
+    console.log("Updated lastLogin:", user.lastLogin);
+    await db.updateUserLastLogin(user.id, user.lastLogin);
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role, fullName: user.full_name }, JWT_SECRET, {
       expiresIn: '7d'
@@ -174,7 +178,9 @@ router.post('/google', async (req, res) => {
       });
     }
 
-    await db.updateUserLastLogin(user.id);
+    user.lastLogin = new Date();
+    console.log("Updated lastLogin:", user.lastLogin);
+    await db.updateUserLastLogin(user.id, user.lastLogin);
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role, fullName: user.full_name }, JWT_SECRET, {
       expiresIn: '7d'
